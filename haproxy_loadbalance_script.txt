@@ -1,0 +1,19 @@
+$ sudo nano /etc/haproxy/haproxy.cfg
+
+# Add to the end
+# Define frontend
+frontend apache_front
+        # Frontend listen port - 80
+        bind *:80
+        # Set the default backend
+        default_backend    apache_backend_servers
+        # Enable send X-Forwarded-For header
+        option             forwardfor
+  
+# Define backend
+backend apache_backend_servers                                                                                                                     
+        # Use roundrobin to balance traffic
+        balance            roundrobin
+        # Define the backend servers
+        server             backend01 192.168.10.11:80 check
+        server             backend02 192.168.10.12:80 check
