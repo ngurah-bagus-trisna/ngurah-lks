@@ -1,19 +1,33 @@
-$ sudo nano /etc/haproxy/haproxy.cfg
+Membuat self signed ssl dengan open ssl
+1. openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/key.pam
+-out /etc/apache2/ssl/certificate.pam
+2. cat key.pam certificate.pam > apache.pam
 
-# Add to the end
-# Define frontend
-frontend apache_front
-        # Frontend listen port - 80
-        bind *:80
-        # Set the default backend
-        default_backend    apache_backend_servers
-        # Enable send X-Forwarded-For header
-        option             forwardfor
-  
-# Define backend
-backend apache_backend_servers                                                                                                                     
-        # Use roundrobin to balance traffic
-        balance            roundrobin
-        # Define the backend servers
-        server             backend01 192.168.10.11:80 check
-        server             backend02 192.168.10.12:80 check
+Apply ke apache
+1. a2enmod ssl
+2. a2ensite default-ssl
+3. add ServerName domain.net:443
+4. edit
+SSLCertificatefile = .crt
+SSLCertificateKeyFile = .key
+5. service apache2 reload
+
+loadbalancer Haproxy
+1. apt  install haproxy -y
+2. configure /etc/haproxy/haproxy.cfg -> add to the end 
+#define frontend
+
+frontend apache
+	bind *:443 ssl crt ${directory}/.pam
+	bind *:80
+	http-request redirect scheme https unless { ssl_fc }
+	default_backend	apache_backend
+	option		forwardfor
+	
+#define backend
+backend apache_backend
+	balance		roundrobin
+	
+	server		backend01 srv1.domain:443 check
+	server		backend02 srv2.domain:443 check
+
