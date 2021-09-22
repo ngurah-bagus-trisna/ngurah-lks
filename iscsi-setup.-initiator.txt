@@ -1,0 +1,23 @@
+1. apt -y install open-iscsi parted
+2. edit file nano /etc/iscsi/initiatorname.iscsi
+	InitiatorName=iqn.${tahun}-${bulan}.com.example:${domain}
+S. nano /etc/iscsi/iscsid.conf
+	node.session.auth.authmethod = CHAP #uncomment line 56
+	node.session.auth.username = username
+	node.session.auth.password = password
+3. service open-iscsi iscsid restart
+4. Discover target dengan cara
+	iscsiadm -m discovery -t sendtargets -p ${ip address target}
+5. Konfirmasi status setelah discover target
+	iscsiadm -m node -o show
+6. iscsiadm -m node  --login 
+7. iscsiadm -m session -o show
+8. cat /proc/partitioons # Melihat partisi
+
+
+Setup partisi iscsi
+1. parted --script /deb/sdb "mklabel gpt"
+2. parted --script /deb/sdb "mkpart primary 0% 100%"
+3. mkkfs.ext4 /def/sdb1
+4. mount /dev/sdb1 /mnt
+5. df -hT # melihat partisi
