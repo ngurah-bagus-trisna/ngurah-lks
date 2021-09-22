@@ -1,0 +1,33 @@
+Konfigurasi Target/storage v1
+1. apt -y install tgt dkms
+2. mkdir ${direktori nanti untuk iscsi}
+3. dd if=/dev/zero of=${direktori iscsi}/disk01.img count=0 bs=1 seek={ukuran disk}G
+4. Konfigurasi /etc/tgt/conf.d/target01.conf
+<target iqn.${tahun}-${bulan}.com.example:${nama bebas}>
+	# tambahkan direktori iscsi
+	backing-store ${direktori iscsi}/disk01.img
+	# tambahkan nama target/iscsi server
+	initiator-name target iqn.${tahun}-${bulan}.com.example:${domain}
+	# tambah user dan password
+	incominguser username password
+</target>
+
+# Refrence https://manpages.debian.org/testing/tgt/targets.conf.5.en.html
+
+Konfigurasi Target dengan targetcli (simple method)
+1. apt -y install targetcli-fb
+2. mkdir ${direktori iscsi}
+3. targetcli
+4. cd backstores/fileio
+5. Buat disk01 dengan cara
+	create disk01 /var/lib/iscsi_disks/disk01.img 10G
+6. cd /iscsi
+7. Buat target rules dengan cara
+	create iqn.${tahun}-${bulan}.com.example:${bebas}
+8. cd iqn.${tahun}-${bulan}.com.example:${bebas}/tgt1/luns
+9. create /backstores/fileio/disk01
+10. cd ../acls
+11. create iqn.${tahun}-${bulan}.com.example:${domain}
+12. set auth userid=username
+13. set auth password=password
+14. exit
