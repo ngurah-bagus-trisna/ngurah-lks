@@ -1,0 +1,43 @@
+Membuat site to site VPN Cisco
+1. Konfigurasi ISAKMP
+router(config)#
+	crypto isakmp policy 1
+		encr 3des # Metode encyption untuk phase 1
+		hash md5 # Hashing algoritma
+		authkentication pre-share # Menggunakan pre share key
+		group 2 
+		lifetime 86400 # Session key lifetime 
+		exit
+	crypto isakmp key firewallcx address ${public ip router lain}
+
+2. Configure IPSEC 
+- Membuat extended ACL
+- Membuat IPSec Transform
+- Membuat Crypto Map
+- Apply Crypto Map ke public interface
+
+a. Membuat extended ACL(Access List)
+	= Membuat acces list untuk define trafik agar lewat ke vpn tunnel.
+router(config)#
+	ip access-list extended VPN-TRAFFIC
+		permit ip ${iplocal router1} ${iplocal router2}
+
+b. Membuat ipsec transform
+router(config)#
+	crypto ipsec transform-set TS esp-3des esp-md5-hmac
+
+c. Membuat Crypto MAP
+Setup crypto map untuk menggabungkan isakamp dan ipsec
+R1(config)# 
+	crypto map CMAP 10 ipsec-isakmp
+		set peer ${ip public router lain}
+		set transform-set TS
+		match address VPN-TRAFFIC # Address list yang sudah dibuat
+
+d. Apply CRYPTO MAP ke public interface
+R1(config)#
+	int f0/1
+		crypto map CMAP	
+
+Apply ke 2 router. Router 1 dan Router 2
+
