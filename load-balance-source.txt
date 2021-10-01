@@ -1,0 +1,13 @@
+HAPROXY Source ip load-balance
+
+1. Create frontend 
+frontend ft_web
+  	bind 0.0.0.0:80
+  	default_backend bk_web
+
+2. Create backend
+backend bk_web
+  	balance source
+  	hash-type consistent # optional
+  	server s1 192.168.10.11:80 check
+  	server s2 192.168.10.21:80 check
