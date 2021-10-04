@@ -1,0 +1,19 @@
+Konfigurasi Haproxy Roundrobin dan Source ip
+
+frontend {bebas}
+	bind *:80
+	default_backend	backend_1
+	acl {bebas_domain} hdr(host) -i {domain : www.sabang.net}
+	user_backend backend_2 if {bebas_domain}
+
+backend backend_1
+	balance roundrobin
+	
+	server srv1	{ip}:80 check
+	server srv2	{ip}:80 check
+
+backend backend_2
+	balance source
+	
+	server	srvuser1	{ip}:80 check
+	server	srvuser2	{ip}:80 check
