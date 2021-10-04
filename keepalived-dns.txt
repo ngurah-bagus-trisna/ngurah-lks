@@ -1,0 +1,38 @@
+Installasi Keepalived
+- Keepalived adalah metode untuk loadbalance kedua server
+
+1. apt update
+2. apt install linux-headers-$(uname -r)
+3. apt install keepalived
+4. Konfigurasi di /etc/keepalived/keepalived.conf
+
+Konfigurasi
+
+1. cp /usr/share/doc/keepalived/samples/keepalived.conf.vrrp /etc/keepalived/keepalived.conf
+2. vim /etc/keepalived/keepalived.conf
+
+
+vrrp_script chk_dns {
+	script "/usr/sbin/pidof named"
+	interval 2
+}
+
+vrrp_instance VI_1 {
+	state MASTER
+	interface ens3
+	virtual_router_id 250
+	priority {yg besar jadi MASTER} ex. 100
+
+	authentication {
+		auth_type PASS
+		auth_pass 1111
+	}
+	virtual_ipaddress {
+		172.16.1.205
+	}
+	track_script {
+		chk_dns
+	}
+	
+}
+
