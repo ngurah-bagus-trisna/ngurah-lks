@@ -3,8 +3,9 @@ Konfigurasi Haproxy Roundrobin dan Source ip
 frontend {bebas}
 	bind *:80
 	default_backend	backend_1
-	acl {bebas_domain} hdr(host) -i {domain : www.sabang.net}
-	user_backend backend_2 if {bebas_domain}
+	acl sabang.net hdr(host) -i www.sabang.net
+	acl user-public hdr(host) -i user001.public.net user002.public.net user003.public.net user004.public.net user005.public.net user096.public.net user097.public.net user098.public.net user099.public.net user100.public.net
+	user_backend backend_2 if sabang.net
 
 backend backend_1
 	balance roundrobin
@@ -17,3 +18,9 @@ backend backend_2
 	
 	server	srvuser1	{ip}:80 check
 	server	srvuser2	{ip}:80 check
+
+backend user-public
+	balance source
+	
+	server server1 		10.0.1.3:443 check maxconn 20 ssl ca-file /etc/ssl/certs/ca.pem
+   	server server2		10.0.1.4:443 check maxconn 20 ssl ca-file /etc/ssl/certs/ca.pem
