@@ -1,0 +1,10 @@
+Convert .pfx --> .pam
+
+1. Extract to certificate
+	openssl pkcs12 -in [yourfile.pfx] -clcerts -nokeys -out [certificate.crt]
+2. Extract to key
+	openssl pkcs12 -in [yourfile.pfx] -nocerts -out [keyfile-encrypted.key]
+3. Undecript key 
+	openssl rsa -in [keyfile-encrypted.key] -out [keyfile-decrypted.key]
+4. Mix certificate and undecript key
+	cat [certificate.crt] [keyfile-decrypted.key] > certificate.pam
