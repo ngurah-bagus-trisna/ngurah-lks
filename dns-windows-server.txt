@@ -1,0 +1,9 @@
+Membuat 25 dns bersamaan dengan powershell
+
+$value = foreach ($user in 01..25) {
+	'{0:D2}' -f $user;
+}
+
+foreach ($item in $value) {
+	Add-DnsServerResourceRecordA -Name "user$item" -ZoneName "merauke.net" -IPv4Address "172.17.11.101" -CreatePtr -TimeToLive 01:00:00;
+}
