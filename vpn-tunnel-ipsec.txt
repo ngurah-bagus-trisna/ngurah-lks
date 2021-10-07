@@ -1,0 +1,30 @@
+VPN IPSEC With Tunnel :
+
+Configure Router 1.
+1. Buat Isakmp Policy
+R1(router)# crypto isakmp policy 1
+	encryption aes
+	auth pre-share
+	group 2
+
+2. Buat key isakmp
+R1(router) # crypto isakmp key {password} address {destination}
+
+3. Buat ipsec phase
+R1(router)# crypto ipsec transform-set TRANSFORM_name esp-aes esp-sha-hmac
+	mode tunnel
+
+4. Config ipsec profile
+R1(router)# crypto ipsec profile IPSEC_NAME
+	set  transform-set TRANSFORM_name
+
+5. Apply ke interface tunnel
+R1(router)# interface tunnel 0
+	ip address {bebas} {netmask}
+	tunnel source {ip_router_source}
+	tunnel destination {ip_tunnel_destination}
+	tunel mode ipsec ipv4
+	tunnel protection ipsec profile IPSEC_NAME
+
+6. Routing ke destination
+R1(router)# ip route destinationIp destinationMask tunnel0
