@@ -1,0 +1,4 @@
+Create multiple line count : qqYp<ctrl+a>q 20@q
+Create multiple line alpha : :set nrformats+=alpha
+                             qqYp<ctrl+a>q 20@q
+                             
