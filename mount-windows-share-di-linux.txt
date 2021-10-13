@@ -1,0 +1,12 @@
+Install CIFS
+1. apt install cifs-utils
+2. mkdir {direktori_mounting}
+3. Buat authorisasi
+    a. vim /etc/windowsauth
+       username=Administrator
+       password=Skills39
+       domain={NamaDomain}
+4. vim /etc/fstab
+    a. Tambah line
+       //windows_ip/backup  /{direktori_mounting} cifs  credentials=/etc/windowsauth,file_mode=0755,dir_mode=0755
+    b. mount /{direktori_mounting}
