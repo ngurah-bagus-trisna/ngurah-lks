@@ -13,7 +13,7 @@ Konfigurasi
 
 
 vrrp_script chk_dns {
-	script "/usr/sbin/pidof named"
+	script "/usr/bin/pgrep named"
 	interval 2
 }
 
