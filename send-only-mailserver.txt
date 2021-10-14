@@ -1,0 +1,20 @@
+Setup Send Only Mail Server
+1. apt install mailutils postfix -y
+2. Configure Postfix
+	a. nano /etc/postfix/main.cf
+	b. ubah value "inet_interface = loopback-only"
+3. test kirim mail
+	a. echo "hello world" | mail -s "patah@mail.indonesia.com"
+4. Enable TLS:465
+	a. Buat certificate di Windows CA
+	b. nano /etc/postfix/main.cf
+	c. edit file
+		# TLS parameters
+		smtpd_tls_cert_file={direktori ssl}
+		smtpd_tls_key_file={direktori ssl}
+		smtp_use_tls=yes
+5. service postfix restart
+6. Buat Aliases (untuk menerima email system)
+	a. nano /etc/aliases
+	b. root: mail@mail.indonesia.com
+	c. newaliases
