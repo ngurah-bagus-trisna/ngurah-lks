@@ -1,0 +1,23 @@
+Installasi ISS Di Windows Server (Khusus untuk 25 user)
+
+1. Install ISS di windows Server 2019
+	a. Install-WindowsFeature Web-Server -IncludeManagementTools
+
+2. Membuat direktori 25 user (C:\www\user\01\..C:\www\user\25\)
+	a. Inisialisasi 01..25 // $value = foreach ($user in 01..25) { '{0:D2}' -f $user }
+	b. Membuat direktori // foreach ($item in $value) { mkdir C:\www\user\$item }
+	c. Membuat file users.html // foreach ($item in $value) { New-Item -Name C:\www\user\$item\users.html -Type file }
+	d. Isi konten website // notepad users.html
+	e. Copy isi konten users.html ke direktori // foreach ($item in $value) { cp users.html C:\www\user\$item\ }
+
+3. Enable Situs
+	a. New-website -Name "user$item.merauke.net" -port 80 -HostHeader "user$item.merauke.net" -PyschicalPath "C:\www\user\$item"
+
+4. Convert situs agar bisa membaca "users.html"
+	a. foreach ($item in $value) { 
+     Add-WebConfigurationProperty -Filter "//defaultDocument/files" -PSPath "IIS:\sites\user$item.merauke.net" -AtIndex 0 -Name "Collection" -Value "users.html"
+     }
+
+5. Enable TLS/SSL port:443
+	a. Buat Self-signed certificate di DC
+	b. scp 
