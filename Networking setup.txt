@@ -1,0 +1,5 @@
+Blok User SSH
+  1. access-list 50 deny host {host ip}
+  2. line vty 0 4
+      access-class 50 in
+      
