@@ -1,0 +1,12 @@
+username patah password KesultananDemak2021
+enable secret KesultananDemak2021
+access-list 1 deny host 30.9.19.10
+access-list 1 deny host 172.16.1.101
+
+line vty 0 4 
+password KesultananDemak2021
+transport input all
+access-class 1 in 
+login 
+login local
+exit
