@@ -1,5 +1,15 @@
-Blok User SSH
-  1. access-list 50 deny host {host ip}
-  2. line vty 0 4
-      access-class 50 in
-      
+Auto script install network
+
+username patah password KesultananDemak2021
+enable password KesultananDemak2021
+access-list 1 permit any
+access-list 1 deny host 172.16.1.101
+access-list 1 deny host 30.9.19.10
+ip domain-name indonesia.com
+line vty 0 4
+transport input all
+password KesultananDemak2021
+login
+login local
+exit 
+crypto key generate rsa 
