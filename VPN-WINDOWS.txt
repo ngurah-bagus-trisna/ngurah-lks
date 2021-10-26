@@ -1,0 +1,14 @@
+Setup VPN Windows Server
+Install routing and remote access RRAS
+1. Manage > Server roles > Remote Access > next > Select Role > Direct access (VPN) > Install
+
+Configure RAS
+1. Open the getting started wizard > Deploy VPN Only > Open Server (Klik kanan) > Configure and enable routing and remote access
+2. Next > Custom Config > Vpn access > Finish > Start service
+
+Create user account
+1.DC > Create user account > TestOU > test user accounts > Add account
+
+Setup NPS
+1. Tools > network policies server > New > type network > VPN > conditions > Windows Groups > add >  Next
+2. Access Granted > next > finish
