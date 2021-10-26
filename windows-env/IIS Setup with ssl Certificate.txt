@@ -1,0 +1,22 @@
+HTTPS IIS
+
+Inisialisasi SSL Certificate
+1. -SelfSignedCertificate -CertStoreLocation 'Cert:\LocalMachine\My' -DnsName '*.merauke.net'
+2. $certPath = 'Cert:\LocalMachine\My\Thumbprint'
+3. $providerPath = 'IIS:\SSLBindings\0.0.0.0!443'
+4. Get-Item $certPath | -item $providerPath
+
+Makes 25 user website 
+1. $value = foreach ($user in 01..25) { '{0:D2}' -f @user }
+2. notepad users.html > insert html file in appendix
+3. Create 25 directory, and cp users.html 
+foreach($item in $value) { 
+	mkdir C:\www\user\$item 
+	cp 'users.html' C:\www\user\$item\
+}
+4. Enable website & add ssl
+foreach ($item in $value) {
+	new-website -name "user$item.merauke.net." -port 80 -HostHeader "user$item.merauke.net" -pyschicalPath "C:\www\user\$item"
+	New-WebBinding -name "user$item.merauke.net" -HostHeader "user$item.merauke.net" -protocol https -port 443
+}
+
