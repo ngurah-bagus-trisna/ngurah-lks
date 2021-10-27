@@ -1,0 +1,20 @@
+Normal Service
+refrence https://docs.docker.com/engine/tutorials/networkingcontainers/
+1. docker run -it --name farm-1 nginx:latest -d
+2. docker run -it --name farm-2 nginx:latest -d
+2. docker run -p 443:443 nginx:latest 
+
+upstream backend {
+	least_conn;
+	
+	server ipfarm1
+	server ipfarm2
+}
+
+server {
+	server_name www.example.com
+
+	location / {
+		proxy_pass http://backend;
+	}
+}
