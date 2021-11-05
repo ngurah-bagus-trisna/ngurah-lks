@@ -1,2 +1,2 @@
-# ngurah-lks
-Repo untuk tools lks 2021
+# ngurah-lksn - ITNSA - BALI
+Repository beberapa konfigurasi dalam LKS Nasional 2021 - ITNSA
